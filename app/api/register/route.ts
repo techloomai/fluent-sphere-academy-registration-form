@@ -28,6 +28,11 @@ export async function POST(request: NextRequest) {
     }
 
     try {
+      console.log("[v0] Checking environment variables...")
+      console.log("[v0] RESEND_API_KEY exists:", !!process.env.RESEND_API_KEY)
+      console.log("[v0] FROM_EMAIL exists:", !!process.env.FROM_EMAIL)
+      console.log("[v0] TO_EMAIL exists:", !!process.env.TO_EMAIL)
+
       if (!process.env.RESEND_API_KEY || !process.env.FROM_EMAIL || !process.env.TO_EMAIL) {
         console.error("[v0] Resend configuration missing")
         return NextResponse.json({ error: "Email service not configured. Please contact support." }, { status: 500 })
@@ -36,13 +41,22 @@ export async function POST(request: NextRequest) {
       console.log("[v0] Sending email via Resend...")
       const result = await sendRegistrationEmail(data)
 
+      console.log("[v0] Email result:", JSON.stringify(result, null, 2))
+
       if (!result.success) {
+        console.error("[v0] Email failed with error:", result.error)
         throw new Error(result.error)
       }
 
       console.log("[v0] Email sent successfully via Resend")
     } catch (emailError) {
-      console.error("[v0] Email sending failed:", emailError)
+      console.error("[v0] Email sending failed - Error type:", typeof emailError)
+      console.error(
+        "[v0] Email sending failed - Error message:",
+        emailError instanceof Error ? emailError.message : String(emailError),
+      )
+      console.error("[v0] Email sending failed - Full error:", emailError)
+
       return NextResponse.json(
         { error: "Failed to send registration email. Please try again or contact support." },
         { status: 500 },
