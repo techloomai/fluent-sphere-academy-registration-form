@@ -14,6 +14,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Progress } from "@/components/ui/progress"
 import { Loader2, CheckCircle, AlertCircle, GraduationCap, User, BookOpen } from "lucide-react"
+import Image from "next/image"
 
 export default function RegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -111,10 +112,16 @@ export default function RegisterPage() {
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="flex justify-center mb-4"
           >
-            <GraduationCap className="w-8 h-8 text-primary" />
+            <Image
+              src="/images/fluent-sphere-logo.jpg"
+              alt="Fluent Sphere Academy Logo"
+              width={120}
+              height={120}
+              className="rounded-lg shadow-lg"
+            />
           </motion.div>
           <h1 className="text-3xl font-bold text-primary mb-2">Student Registration</h1>
           <p className="text-muted-foreground">Fluent Sphere Academy - IELTS Preparation</p>
