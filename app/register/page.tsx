@@ -618,6 +618,17 @@ export default function RegisterPage() {
               info@fluentsphereacademy.lk
             </a>
           </p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Made with ♥️ by{" "}
+            <a
+              href="https://techloom.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent hover:underline transition-colors"
+            >
+              Techloom
+            </a>
+          </p>
         </motion.div>
       </motion.div>
     </div>

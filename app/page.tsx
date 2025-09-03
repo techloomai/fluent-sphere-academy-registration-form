@@ -29,6 +29,17 @@ export default function HomePage() {
               info@fluentsphereacademy.lk
             </a>
           </p>
+          <p className="text-xs text-muted-foreground mt-2">
+            Made with ♥️ by{" "}
+            <a
+              href="https://techloom.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent hover:underline transition-colors"
+            >
+              Techloom
+            </a>
+          </p>
         </div>
       </div>
     </div>
