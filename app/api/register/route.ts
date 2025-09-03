@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { registrationSchema } from "@/lib/validation"
-import { sendRegistrationEmail } from "@/lib/email"
+import { sendRegistrationEmail, sendRegistrationEmailSMTP } from "@/lib/email"
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,17 +27,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid submission" }, { status: 400 })
     }
 
-    // Check if required environment variables are set
-    if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
-      console.error("Email configuration missing. Please set SMTP environment variables.")
-      return NextResponse.json({ error: "Email service not configured. Please contact support." }, { status: 500 })
-    }
-
-    // Send registration email
     try {
-      await sendRegistrationEmail(data)
+      // Try Resend first (preferred method)
+      if (process.env.RESEND_API_KEY && process.env.FROM_EMAIL && process.env.TO_EMAIL) {
+        console.log("[v0] Attempting to send email via Resend...")
+        await sendRegistrationEmail(data)
+        console.log("[v0] Email sent successfully via Resend")
+      }
+      // Fallback to SMTP if Resend is not configured
+      else if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+        console.log("[v0] Resend not configured, falling back to SMTP...")
+        await sendRegistrationEmailSMTP(data)
+        console.log("[v0] Email sent successfully via SMTP")
+      }
+      // No email service configured
+      else {
+        console.error("[v0] No email service configured")
+        return NextResponse.json({ error: "Email service not configured. Please contact support." }, { status: 500 })
+      }
     } catch (emailError) {
-      console.error("Failed to send registration email:", emailError)
+      console.error("[v0] All email methods failed:", emailError)
       return NextResponse.json(
         { error: "Failed to send registration email. Please try again or contact support." },
         { status: 500 },
@@ -53,8 +62,7 @@ export async function POST(request: NextRequest) {
       { status: 200 },
     )
   } catch (error) {
-    console.error("Registration API error:", error)
-
+    console.error("[v0] Registration API error:", error)
     return NextResponse.json({ error: "Internal server error. Please try again later." }, { status: 500 })
   }
 }
