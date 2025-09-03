@@ -1,0 +1,27 @@
+{
+  "name": "Fluent Sphere Academy",
+  "short_name": "Fluent Sphere",
+  "description": "A Global Space for Fluency - Master English with Expert Instructors",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#131f43",
+  "theme_color": "#d6a557",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/fluent-sphere-logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/fluent-sphere-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["education", "learning", "language"],
+  "lang": "en",
+  "dir": "ltr"
+}
