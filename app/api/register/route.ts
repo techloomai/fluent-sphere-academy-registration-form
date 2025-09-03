@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { registrationSchema } from "@/lib/validation"
-import { sendRegistrationEmail, sendRegistrationEmailSMTP } from "@/lib/email"
+import { sendRegistrationEmail } from "@/lib/email"
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,25 +28,21 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      // Try Resend first (preferred method)
-      if (process.env.RESEND_API_KEY && process.env.FROM_EMAIL && process.env.TO_EMAIL) {
-        console.log("[v0] Attempting to send email via Resend...")
-        await sendRegistrationEmail(data)
-        console.log("[v0] Email sent successfully via Resend")
-      }
-      // Fallback to SMTP if Resend is not configured
-      else if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
-        console.log("[v0] Resend not configured, falling back to SMTP...")
-        await sendRegistrationEmailSMTP(data)
-        console.log("[v0] Email sent successfully via SMTP")
-      }
-      // No email service configured
-      else {
-        console.error("[v0] No email service configured")
+      if (!process.env.RESEND_API_KEY || !process.env.FROM_EMAIL || !process.env.TO_EMAIL) {
+        console.error("[v0] Resend configuration missing")
         return NextResponse.json({ error: "Email service not configured. Please contact support." }, { status: 500 })
       }
+
+      console.log("[v0] Sending email via Resend...")
+      const result = await sendRegistrationEmail(data)
+
+      if (!result.success) {
+        throw new Error(result.error)
+      }
+
+      console.log("[v0] Email sent successfully via Resend")
     } catch (emailError) {
-      console.error("[v0] All email methods failed:", emailError)
+      console.error("[v0] Email sending failed:", emailError)
       return NextResponse.json(
         { error: "Failed to send registration email. Please try again or contact support." },
         { status: 500 },
