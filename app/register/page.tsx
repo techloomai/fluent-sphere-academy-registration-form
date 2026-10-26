@@ -625,17 +625,24 @@ export default function RegisterPage() {
               info@fluentsphereacademy.lk
             </a>
           </p>
-          <p className="text-sm text-muted-foreground mt-2">
-            Made with ♥️ by{" "}
+          <div className="text-sm text-muted-foreground mt-2 flex items-center justify-center gap-1.5">
+            <span>Made with love by</span>
             <a
               href="https://techloom.ai"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent hover:underline transition-colors"
+              className="inline-flex items-center transition-opacity hover:opacity-80"
+              aria-label="Techloom.ai"
             >
-              Techloom
+              <Image
+                src="/techloom-logo.svg"
+                alt="Techloom.ai"
+                width={80}
+                height={20}
+                className="h-5 w-auto object-contain bg-[#1A1F13] rounded px-1.5 py-0.5"
+              />
             </a>
-          </p>
+          </div>
         </motion.div>
       </motion.div>
     </div>
