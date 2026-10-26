@@ -1,4 +1,4 @@
-# Fluent Sphere registration form
+# Fluent Sphere registration Form
 
 *Automatically synced with your [v0.app](https://v0.app) deployments*
 
